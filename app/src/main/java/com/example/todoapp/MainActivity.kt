@@ -8,6 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -17,9 +18,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.containerView) as NavHostFragment
+
+        //Достаётся NavController из NavHostFragment. NavHostFragment всегда содержит NavController, который управляет переходами между фрагментами.
         val navController = navHostFragment.navController
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        //Связывает нижнее меню с навигационным контроллером.
         bottomNav.setupWithNavController(navController)
+
+
     }
 }
