@@ -46,9 +46,7 @@ fab.setOnClickListener {
         val hintForUser = view.findViewById<TextView>(R.id.hintStart)
         fab.setOnClickListener {
             showAddTaskDialog(hintForUser)
-
         }
-
     }
 
     private fun showAddTaskDialog(hintForStart: TextView) {
