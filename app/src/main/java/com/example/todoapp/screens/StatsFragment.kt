@@ -4,5 +4,4 @@ import androidx.fragment.app.Fragment
 import com.example.todoapp.R
 
 
-class StatsFragment: Fragment(R.layout.fragment_stats) {
-}
+class StatsFragment: Fragment(R.layout.fragment_stats) {}
