@@ -6,8 +6,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.R
+import com.example.todoapp.db.Task
 
-class MainAdapter(private val tasks: MutableList<String>): RecyclerView.Adapter<MainAdapter.ViewHolder>() {
+class MainAdapter(private val tasks: MutableList<Task>,
+                  private val onTaskClick: (Task) -> Unit // простой колбэк
+    ): RecyclerView.Adapter<MainAdapter.ViewHolder>() {
+
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val textView: TextView = view.findViewById(R.id.taskView)
     }
@@ -27,19 +31,20 @@ class MainAdapter(private val tasks: MutableList<String>): RecyclerView.Adapter<
     RecyclerView снова всё обновляет
     */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = tasks[position]
+        val task = tasks[position]
+        holder.textView.text = task.task
 
-        /*
-        удалять нужно через адаптер, потому что:
-        адаптер управляет данными, которые показываются в RecyclerView
-        RecyclerView ничего не знает о списке задач напрямую — он получает всё только от адаптера.
-         */
         holder.textView.setOnClickListener {
-            tasks.removeAt(position)
-            notifyDataSetChanged()
+            onTaskClick(task) // передаём задачу наружу
         }
     }
 
     override fun getItemCount() = tasks.size
+
+    fun setData(newList: List<Task>) {
+        tasks.clear()
+        tasks.addAll(newList)
+        notifyDataSetChanged()
+    }
 
 }
