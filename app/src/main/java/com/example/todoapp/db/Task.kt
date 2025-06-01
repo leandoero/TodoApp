@@ -12,5 +12,7 @@ data class Task(
     @ColumnInfo(name = "task_name")
     val task:String,
     @ColumnInfo(name = "task_complete")
-    val isComplete: Boolean
+    val isComplete: Boolean,
+    @ColumnInfo(name = "create_time")
+    val createdAt: Long = System.currentTimeMillis()
 )

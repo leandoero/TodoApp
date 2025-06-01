@@ -6,14 +6,19 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [Task::class], version = 1)
-abstract class MainDb: RoomDatabase() {
+@Database(entities = [Task::class], version = 2)
+abstract class MainDb : RoomDatabase() {
     abstract fun getDao(): Dao
 
-    companion object{
-        fun getDb(context: Context): MainDb{
-            return Room.databaseBuilder(context.applicationContext, MainDb::class.java, "main.db").build()
+    companion object {
+        fun getDb(context: Context): MainDb {
+            return Room.databaseBuilder(
+                context.applicationContext,
+                MainDb::class.java,
+                "main.db"
+            )
+                .fallbackToDestructiveMigration()
+                .build()
         }
     }
-
 }

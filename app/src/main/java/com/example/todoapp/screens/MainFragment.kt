@@ -1,6 +1,7 @@
 package com.example.todoapp.screens
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
 import android.view.LayoutInflater
@@ -8,25 +9,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.SimpleAdapter
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.R
-import com.example.todoapp.databinding.ActivityMainBinding
 import com.example.todoapp.databinding.FragmentMainBinding
 import com.example.todoapp.db.Dao
 import com.example.todoapp.db.MainDb
 import com.example.todoapp.db.Task
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 
 class MainFragment : Fragment(R.layout.fragment_main) {
 
@@ -36,6 +31,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = FragmentMainBinding.bind(view)
         super.onViewCreated(view, savedInstanceState)
@@ -43,13 +39,15 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         db = MainDb.getDb(requireContext())
         dao = db.getDao()
 
+        checkAndClearTasksIfNewDay()
+
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         adapter = MainAdapter(mutableListOf()) { task ->
             lifecycleScope.launch(Dispatchers.IO) {
-                db.getDao().delete(task)
+                dao.updateTaskCompleted(task.id, !task.isComplete)
             }
-
         }
+
         binding.recyclerView.adapter = adapter
 
         binding.fabButton.setOnClickListener {
@@ -97,4 +95,21 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             hint.visibility = View.GONE
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun checkAndClearTasksIfNewDay() {
+        val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val lastDate = prefs.getString("last_date", null)
+        val todayDate = java.time.LocalDate.now().toString()  // формат "YYYY-MM-DD"
+
+        if (lastDate != todayDate) {
+            // новый день — очищаем задачи
+            lifecycleScope.launch(Dispatchers.IO) {
+                dao.deleteAllTasks()  // нужно добавить метод удаления всех задач в Dao
+                prefs.edit().putString("last_date", todayDate).apply()
+            }
+        }
+    }
+
+
 }
