@@ -2,17 +2,65 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText">
 
     <TextView
+        android:id="@+id/titleView"
         android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
-        android:text="Stats Page"
-        android:textSize="70sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Daily statistics"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/circleStats"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/circleStats"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/background_circle"
+        app:layout_constraintVertical_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintWidth_percent="0.7"/>
+
+
+    <TextView
+        android:id="@+id/completedView"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="Completed: 0 tasks"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/circleStats"
+        app:layout_constraintVertical_bias="0.073" />
+
+    <TextView
+        android:id="@+id/uncompletedView"
+        android:layout_width="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        app:layout_constraintVertical_bias="0.05"
+        android:text="Uncompleted: 10 tasks"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/completedView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
